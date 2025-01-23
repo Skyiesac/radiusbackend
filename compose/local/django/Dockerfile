@@ -13,6 +13,10 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
   # psycopg dependencies
   libpq-dev
 
+RUN apt-get update && apt-get install -y \
+  gdal-bin \
+  libgdal-dev \
+  python3-gdal
 # Requirements are installed here to ensure they will be cached.
 COPY ./requirements .
 

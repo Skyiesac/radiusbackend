@@ -32,6 +32,18 @@ django_application = get_asgi_application()
 # Import websocket application here, so apps from django_application are loaded first
 from config.websocket import websocket_application
 
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "config.settings.local")
+from channels.routing import ProtocolTypeRouter, URLRouter
+from channels.auth import AuthMiddlewareStack
+from fileshare.routing import websocket_urlpatterns
+
+application = ProtocolTypeRouter(
+    {
+        "http": get_asgi_application(),
+        "websocket": AuthMiddlewareStack(URLRouter(websocket_urlpatterns)),
+    }
+)
+
 
 async def application(scope, receive, send):
     if scope["type"] == "http":

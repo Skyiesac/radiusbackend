@@ -23,6 +23,24 @@ services:
       - '8000:8000'
     command: /start
 
+  daphne:
+    build:
+      context: .
+      dockerfile: ./compose/local/django/Dockerfile
+    image: radiusbackend_local_daphne
+    container_name: radiusbackend_local_daphne
+    depends_on:
+      - postgres
+      - redis
+    volumes:
+      - .:/app:z
+    env_file:
+      - ./.envs/.local/.django
+      - ./.envs/.local/.postgres
+    ports:
+      - '8001:8001'
+    command: daphne -p 8001 config.asgi:application
+
   postgres:
     build:
       context: .
@@ -44,10 +62,10 @@ services:
   redis:
     image: docker.io/redis:6
     container_name: radiusbackend_local_redis
-    
+
     volumes:
       - radiusbackend_local_redis_data:/data
-    
+
 
   celeryworker:
     <<: *django
