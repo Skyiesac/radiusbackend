@@ -3,7 +3,7 @@
 
 import ssl
 from pathlib import Path
-
+import os
 import environ
 
 BASE_DIR = Path(__file__).resolve(strict=True).parent.parent.parent
@@ -46,10 +46,26 @@ LOCALE_PATHS = [str(BASE_DIR / "locale")]
 # DATABASES
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#databases
-DATABASES = {"default": env.db("DATABASE_URL")}
-DATABASES["default"]["ATOMIC_REQUESTS"] = True
+DATABASES = {
+    "default": {
+        "ENGINE": "django.contrib.gis.db.backends.postgis",
+        "POSTGRES_NAME": "radiusbackend",
+        "POSTGRES_USER": "cookiecutter",
+        "POSTGRES_PASSWORD": "cookiecutter",
+        "POSTGRES_HOST": "postgres",
+        "POSTGRES_PORT": "5432",
+    }
+}
+
 # https://docs.djangoproject.com/en/stable/ref/settings/#std:setting-DEFAULT_AUTO_FIELD
+
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+GDAL_LIBRARY_PATH = os.getenv(
+    "GDAL_LIBRARY_PATH", "/usr/lib/x86_64-linux-gnu/libgdal.so.32"
+)
+GEOS_LIBRARY_PATH = os.getenv(
+    "GEOS_LIBRARY_PATH", "/usr/lib/x86_64-linux-gnu/libgeos_c.so.1"
+)
 
 # URLS
 # ------------------------------------------------------------------------------
@@ -64,6 +80,7 @@ DJANGO_APPS = [
     "daphne",
     "channels",
     "django.contrib.auth",
+    "django.contrib.gis",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.sites",

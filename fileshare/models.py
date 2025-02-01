@@ -2,7 +2,7 @@ from datetime import timedelta
 
 from django.db import models
 from django.utils import timezone
-
+from django.contrib.gis.db.models import PointField
 from .tasks import delete_file
 
 
@@ -12,8 +12,7 @@ class FileUploaded(models.Model):
     file = models.FileField(upload_to="file-shared/", null=True)
     text = models.TextField(null=True)
     access_code = models.CharField(max_length=10, unique=True)
-    latitude = models.FloatField()
-    longitude = models.FloatField()
+    location = PointField()
     created_at = models.DateTimeField(auto_now=True)
     delete_at = models.DateTimeField(null=True)
 

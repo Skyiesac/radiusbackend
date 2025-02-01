@@ -18,8 +18,7 @@ class FileUploadedSerializer(serializers.ModelSerializer):
             "file",
             "text",
             "access_code",
-            "latitude",
-            "longitude",
+            "location",
             "created_at",
         ]
         read_only_fields = ["created_at", "delete_at", "access_code"]
@@ -30,15 +29,5 @@ class FileUploadedSerializer(serializers.ModelSerializer):
 
         if not data.get("file") and not data.get("text"):
             raise serializers.ValidationError("Either file or text must be provided")
-
-        if data.get("latitude"):
-            if data["latitude"] < -90 or data["latitude"] > 90:
-                raise serializers.ValidationError("Latitude must be between -90 and 90")
-
-        if data.get("longitude"):
-            if data["longitude"] < -180 or data["longitude"] > 180:
-                raise serializers.ValidationError(
-                    "Longitude must be between -180 and 180",
-                )
 
         return data
