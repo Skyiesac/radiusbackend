@@ -9,8 +9,7 @@ class FileUploadedAdmin(admin.ModelAdmin):
     list_display = (
         "name",
         "access_code",
-        "latitude",
-        "longitude",
+        "location",
         "created_at",
         "delete_at",
     )

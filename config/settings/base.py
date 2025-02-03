@@ -47,25 +47,15 @@ LOCALE_PATHS = [str(BASE_DIR / "locale")]
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#databases
 DATABASES = {
-    "default": {
-        "ENGINE": "django.contrib.gis.db.backends.postgis",
-        "POSTGRES_NAME": "radiusbackend",
-        "POSTGRES_USER": "cookiecutter",
-        "POSTGRES_PASSWORD": "cookiecutter",
-        "POSTGRES_HOST": "postgres",
-        "POSTGRES_PORT": "5432",
-    }
+    "default": env.db(
+        "DATABASE_URL",
+        engine="django.contrib.gis.db.backends.postgis",
+    ),
 }
 
 # https://docs.djangoproject.com/en/stable/ref/settings/#std:setting-DEFAULT_AUTO_FIELD
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
-GDAL_LIBRARY_PATH = os.getenv(
-    "GDAL_LIBRARY_PATH", "/usr/lib/x86_64-linux-gnu/libgdal.so.32"
-)
-GEOS_LIBRARY_PATH = os.getenv(
-    "GEOS_LIBRARY_PATH", "/usr/lib/x86_64-linux-gnu/libgeos_c.so.1"
-)
 
 # URLS
 # ------------------------------------------------------------------------------

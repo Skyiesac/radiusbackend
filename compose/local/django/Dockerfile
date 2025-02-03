@@ -10,18 +10,9 @@ ARG BUILD_ENVIRONMENT=local
 RUN apt-get update && apt-get install --no-install-recommends -y \
   # dependencies for building Python packages
   build-essential \
-    binutils \
-    libproj-dev \
-  libpq-dev  \
-  gdal-bin \
-  libgdal-dev \
-  python3-gdal \
-  postgresql-client \
   # psycopg dependencies
-  && ldconfig \
-  && apt-get clean \
-  && export GDAL_VERSION=$(gdal-config --version)
-
+  libpq-dev \
+  libgdal-dev
 
 # Requirements are installed here to ensure they will be cached.
 COPY ./requirements .
@@ -54,22 +45,22 @@ RUN groupadd --gid 1000 dev-user \
   && echo dev-user ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/dev-user \
   && chmod 0440 /etc/sudoers.d/dev-user
 
-ENV GDAL_LIBRARY_PATH=/usr/lib/x86_64-linux-gnu/libgdal.so.32
-ENV GEOS_LIBRARY_PATH=/usr/lib/x86_64-linux-gnu/libgeos_c.so.1
 
 # Install required system dependencies
 RUN apt-get update && apt-get install --no-install-recommends -y \
   # psycopg dependencies
-  libpq-dev  \
+  libpq-dev \
+  # GDAL and its dependencies
+  gdal-bin \
+  python3-gdal \
+  libgdal-dev \
+  # wait-for-it
   wait-for-it \
   # Translations dependencies
   gettext \
   # cleaning up unused files
   && apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false \
   && rm -rf /var/lib/apt/lists/*
-
-ENV GDAL_LIBRARY_PATH=/usr/lib/x86_64-linux-gnu/libgdal.so.32
-ENV GEOS_LIBRARY_PATH=/usr/lib/x86_64-linux-gnu/libgeos_c.so.1
 
 # All absolute dir copies ignore workdir instruction. All relative dir copies are wrt to the workdir instruction
 # copy python dependency wheels from python-build-stage

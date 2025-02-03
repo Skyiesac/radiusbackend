@@ -58,7 +58,6 @@ services:
       - POSTGRES_DB=radiusbackend
       - POSTGRES_USER=debug
       - POSTGRES_PASSWORD=debug
-      - LD_LIBRARY_PATH=/usr/lib/x86_64-linux-gnu/libgdal.so.32
     ports:
       - "5432:5432"
 
